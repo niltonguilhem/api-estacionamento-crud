@@ -12,9 +12,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/v1/estacionamento")
 public class EstacionamentoController {
+
     @Autowired
     private VagaService service;
-
+    /**Estudar conceito de request e response, te enviei um resumo do stackoverflow **/
 
     /** modificar a nomenclatura do método, talvez para getAllVagas **/
     @GetMapping()

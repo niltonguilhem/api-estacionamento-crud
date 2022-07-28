@@ -9,6 +9,9 @@ import org.springframework.util.Assert;
 
 import java.util.Optional;
 
+/** Estudar sobre SOLID,
+ * enviar no chat o site para o Sr ler
+ **/
 @Service
 public class VagaService {
 

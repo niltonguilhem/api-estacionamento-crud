@@ -5,9 +5,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**Estudar sobre JPA
+ * @Table o que faz essa anotação?
+ * **/
 @Entity
 public class Vagas {
 
+    /**@Column o que faz essa anotação? **/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idvaga;
