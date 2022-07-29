@@ -20,7 +20,7 @@ public class VagaService {
 
     public Iterable<Vagas> findEstacionamento() {
         return repository.findAll(); }
-
+//Arrumar o nome desse método
     public Optional<Vagas> getVagaById(Long idvaga) {
         return repository.findById(idvaga);
     }
