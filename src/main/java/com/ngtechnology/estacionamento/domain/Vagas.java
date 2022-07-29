@@ -1,15 +1,10 @@
 package com.ngtechnology.estacionamento.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
-/**Estudar sobre JPA
- * @Table o que faz essa anotação?
- * **/
 @Entity
-public class Vagas {
+@Table (name = "vagas")
+public class  Vagas {
 
     /**@Column o que faz essa anotação? **/
     @Id
