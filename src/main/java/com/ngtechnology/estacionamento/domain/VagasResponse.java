@@ -1,19 +1,16 @@
 package com.ngtechnology.estacionamento.domain;
 
-import javax.persistence.*;
+public class VagasResponse {
 
-@Entity
-@Table (name = "vagas")
-public class Vagas {
-
-    /**@Column o que faz essa anotação? **/
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idvaga;
     private Boolean disponivel;
 
-    public Vagas(){
+    public VagasResponse(){
+    }
 
+    public VagasResponse(Long idvaga, Boolean disponivel) {
+        this.idvaga = idvaga;
+        this.disponivel = disponivel;
     }
 
     public Long getIdvaga() {
@@ -31,14 +28,12 @@ public class Vagas {
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
     }
-
-    public Vagas withBuilderDisponivel(Boolean disponivel){
+    public VagasResponse withBuilderDisponivel(Boolean disponivel){
         setDisponivel(disponivel);
         return this;
     }
-    public Vagas withBuilderVagasId(Long id){
-        setIdvaga(id);
+    public VagasResponse withBuilderVagasId(Long vagasId){
+        setIdvaga(vagasId);
         return this;
     }
-
 }

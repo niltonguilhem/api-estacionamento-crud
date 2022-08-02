@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
 import java.util.Optional;
 
 /** Estudar sobre SOLID,
@@ -18,9 +19,10 @@ public class VagaService {
     @Autowired
     private VagaRepository repository;
 
-    public Iterable<Vagas> findEstacionamento() {
-        return repository.findAll(); }
-//Arrumar o nome desse método
+    public List<Vagas> findEstacionamento() {
+        return repository.findAll();
+    }
+    //Arrumar o nome desse método
     public Optional<Vagas> getVagaById(Long idvaga) {
         return repository.findById(idvaga);
     }
