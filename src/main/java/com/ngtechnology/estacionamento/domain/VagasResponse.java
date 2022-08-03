@@ -2,23 +2,23 @@ package com.ngtechnology.estacionamento.domain;
 
 public class VagasResponse {
 
-    private Long idvaga;
+    private Long idVaga;
     private Boolean disponivel;
 
     public VagasResponse(){
     }
 
-    public VagasResponse(Long idvaga, Boolean disponivel) {
-        this.idvaga = idvaga;
+    public VagasResponse(Long idVaga, Boolean disponivel) {
+        this.idVaga = idVaga;
         this.disponivel = disponivel;
     }
 
-    public Long getIdvaga() {
-        return idvaga;
+    public Long getIdVaga() {
+        return idVaga;
     }
 
-    public void setIdvaga(Long idvaga) {
-        this.idvaga = idvaga;
+    public void setIdVaga(Long idVaga) {
+        this.idVaga = idVaga;
     }
 
     public Boolean getDisponivel() {
@@ -33,7 +33,7 @@ public class VagasResponse {
         return this;
     }
     public VagasResponse withBuilderVagasId(Long vagasId){
-        setIdvaga(vagasId);
+        setIdVaga(vagasId);
         return this;
     }
 }

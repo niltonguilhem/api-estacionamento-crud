@@ -1,11 +1,13 @@
 package com.ngtechnology.estacionamento.service;
 
 import com.ngtechnology.estacionamento.domain.Vagas;
+import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.repository.VagaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +25,22 @@ public class VagaService {
         return repository.findAll();
     }
     //Arrumar o nome desse método
-    public Optional<Vagas> getVagaById(Long idvaga) {
-        return repository.findById(idvaga);
+    public Vagas getVagaById(Long idVaga) {
+        return repository.findById(idVaga).get();
+    }
+    public Optional<Vagas> getVagaByIdOptional(Long idVaga) {
+        return repository.findById(idVaga);
     }
 
     public Vagas save(Vagas vagas) {return repository.save(vagas);}
 
-    public Vagas update(Vagas vagas, Long id) {
-        Optional<Vagas> optional = getVagaById(id);
+    public Vagas update(Vagas vagas) {
+        Optional<Vagas> optional = getVagaByIdOptional(vagas.getIdVaga());
         if (optional.isPresent()){
-            Vagas db = optional.get();
-            db.setDisponivel(vagas.getDisponivel());
-            repository.save(db);
-            return db;
+            Vagas vagasEntity = vagas;
+            vagasEntity.setDisponivel(vagas.getDisponivel());
+            repository.save(vagasEntity);
+            return vagasEntity;
         }
         else {
             throw new RuntimeException();

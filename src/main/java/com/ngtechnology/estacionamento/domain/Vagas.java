@@ -9,19 +9,21 @@ public class Vagas {
     /**@Column o que faz essa anotação? **/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idvaga;
+    @Column(name = "idvaga")
+    private Long idVaga;
+    @Column(name = "disponivel")
     private Boolean disponivel;
 
     public Vagas(){
 
     }
 
-    public Long getIdvaga() {
-        return idvaga;
+    public Long getIdVaga() {
+        return idVaga;
     }
 
-    public void setIdvaga(Long idvaga) {
-        this.idvaga = idvaga;
+    public void setIdvaga(Long idVaga) {
+        this.idVaga = idVaga;
     }
 
     public Boolean getDisponivel() {

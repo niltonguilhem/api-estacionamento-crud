@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/v1/estacionamento")
@@ -25,10 +25,16 @@ public class EstacionamentoController {
         return new ResponseEntity<>(service.findEstacionamento(),HttpStatus.OK);
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Vagas>> getIdVagas(@PathVariable("id") Long idvaga){
-        return new ResponseEntity<>(service.getVagaById(idvaga),HttpStatus.OK);
+    public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id){
+        Vagas vagas = service.getVagaById(id);
+        VagasResponse response = new VagasResponse()
+                .withBuilderVagasId(vagas.getIdVaga())
+                .withBuilderDisponivel(vagas.getDisponivel());
+
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+
     }
 
     @PostMapping
@@ -37,17 +43,28 @@ public class EstacionamentoController {
         Vagas vagas = service.save(new Vagas().withBuilderDisponivel(vagasRequest.getDisponivel()));
 
         VagasResponse response = new VagasResponse()
-                .withBuilderVagasId(vagas.getIdvaga())
+                .withBuilderVagasId(vagas.getIdVaga())
                 .withBuilderDisponivel(vagas.getDisponivel());
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Vagas> putVagas (@PathVariable ("id") Long id, @RequestBody Vagas vagas){
-        Vagas v = service.update(vagas,id);
-        return new ResponseEntity<>(v, HttpStatus.OK);
+    public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id, @RequestBody VagasRequest vagasRequest){
+
+        Vagas vagasUpdate = service.update(new Vagas()
+                .withBuilderVagasId(id)
+                .withBuilderDisponivel(vagasRequest.getDisponivel()));
+
+        VagasResponse response = new VagasResponse()
+                .withBuilderVagasId(vagasUpdate.getIdVaga())
+                .withBuilderDisponivel(vagasUpdate.getDisponivel());
+
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+
 }
 
 
