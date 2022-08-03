@@ -20,9 +20,15 @@ public class EstacionamentoController {
     /**Estudar conceito de request e response, te enviei um resumo do stackoverflow **/
 
 
+
     @GetMapping()
-    public ResponseEntity<List<Vagas>> getAllVagas() {
-        return new ResponseEntity<>(service.findEstacionamento(),HttpStatus.OK);
+    public ResponseEntity<List<VagasResponse>> getAllVagas(){
+        List<Vagas> vagasList = service.findAllVagas();
+        List<VagasResponse> vagasResponseList = vagasList.stream().map(x -> new VagasResponse()
+                .withBuilderVagasId(x.getIdVaga())
+                .withBuilderDisponivel(x.getDisponivel())).toList();
+
+        return new ResponseEntity<>(vagasResponseList,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")

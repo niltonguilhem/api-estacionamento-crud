@@ -21,7 +21,7 @@ public class VagaService {
     @Autowired
     private VagaRepository repository;
 
-    public List<Vagas> findEstacionamento() {
+    public List<Vagas> findAllVagas() {
         return repository.findAll();
     }
     //Arrumar o nome desse método
