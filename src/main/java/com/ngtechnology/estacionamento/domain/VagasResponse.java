@@ -28,6 +28,7 @@ public class VagasResponse {
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
     }
+
     public VagasResponse withBuilderDisponivel(Boolean disponivel){
         setDisponivel(disponivel);
         return this;

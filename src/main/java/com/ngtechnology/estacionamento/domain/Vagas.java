@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table (name = "vagas")
 public class Vagas {
 
-    /**@Column o que faz essa anotação? **/
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idvaga")

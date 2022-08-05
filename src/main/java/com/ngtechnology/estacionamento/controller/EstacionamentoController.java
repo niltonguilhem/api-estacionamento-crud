@@ -17,9 +17,6 @@ public class EstacionamentoController {
 
     @Autowired
     private VagaService service;
-    /**Estudar conceito de request e response, te enviei um resumo do stackoverflow **/
-
-
 
     @GetMapping()
     public ResponseEntity<List<VagasResponse>> getAllVagas(){
