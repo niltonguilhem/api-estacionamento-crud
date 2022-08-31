@@ -1,25 +1,19 @@
 package com.ngtechnology.estacionamento.service;
 
 import com.ngtechnology.estacionamento.domain.Vagas;
-import com.ngtechnology.estacionamento.domain.VagasRequest;
-import com.ngtechnology.estacionamento.repository.VagaRepository;
+import com.ngtechnology.estacionamento.repository.VagasRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
-import org.springframework.util.ObjectUtils;
+
 
 import java.util.List;
 import java.util.Optional;
 
-/** Estudar sobre SOLID,
- * enviar no chat o site para o Sr ler
- **/
 @Service
-public class VagaService {
+public class VagasService {
 
     @Autowired
-    private VagaRepository repository;
+    private VagasRepository repository;
 
     public List<Vagas> findAllVagas() {
         return repository.findAll();

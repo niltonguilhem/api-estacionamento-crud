@@ -1,25 +1,33 @@
 package com.ngtechnology.estacionamento.controller;
 
+
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
-import com.ngtechnology.estacionamento.service.VagaService;
+import com.ngtechnology.estacionamento.repository.VagasRepository;
+import com.ngtechnology.estacionamento.service.VagasService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/api/v1/estacionamento")
-public class EstacionamentoController {
+public class VagasController {
+
+    private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
+
 
     @Autowired
-    private VagaService service;
+    private VagasService service;
 
     @GetMapping()
     public ResponseEntity<List<VagasResponse>> getAllVagas(){
+        logger.info("Consultando vagas...");
         List<Vagas> vagasList = service.findAllVagas();
         List<VagasResponse> vagasResponseList = vagasList.stream().map(x -> new VagasResponse()
                 .withBuilderVagasId(x.getIdVaga())
@@ -29,17 +37,19 @@ public class EstacionamentoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id){
-        Vagas vagas = service.getVagaById(id);
-        VagasResponse response = new VagasResponse()
-                .withBuilderVagasId(vagas.getIdVaga())
-                .withBuilderDisponivel(vagas.getDisponivel());
-
-
-        return new ResponseEntity<>(response,HttpStatus.OK);
-
+    public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
+        try {
+            Vagas vagas = service.getVagaById(id);
+            logger.info("Vaga com id: " + id + " encotrada" );
+            VagasResponse response = new VagasResponse()
+                    .withBuilderVagasId(vagas.getIdVaga())
+                    .withBuilderDisponivel(vagas.getDisponivel());
+        return new ResponseEntity<>(response, HttpStatus.OK);
+        }catch (NoSuchElementException nsee) {
+            logger.info("Vaga com id: " + id + " não encontrada");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
-
     @PostMapping
     public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest){
 
@@ -51,7 +61,6 @@ public class EstacionamentoController {
 
         return new ResponseEntity<>(response,HttpStatus.CREATED);
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id, @RequestBody VagasRequest vagasRequest){
 
