@@ -1,7 +1,10 @@
 package com.ngtechnology.estacionamento.service;
 
+import com.ngtechnology.estacionamento.controller.VagasController;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.repository.VagasRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,9 @@ import java.util.Optional;
 
 @Service
 public class VagasService {
+
+    private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
+
 
     @Autowired
     private VagasRepository repository;
@@ -28,6 +34,7 @@ public class VagasService {
 
     public Vagas save(Vagas vagas) {return repository.save(vagas);}
 
+
     public Vagas update(Vagas vagas) {
         Optional<Vagas> optional = getVagaByIdOptional(vagas.getIdVaga());
         if (optional.isPresent()){
@@ -36,8 +43,8 @@ public class VagasService {
             repository.save(vagasEntity);
             return vagasEntity;
         }
-        else {
-            throw new RuntimeException();
+        else { logger.warn("O id: " + vagas.getIdVaga() + " informado é inexistente");
+            throw new RuntimeException("O id informado é inexistente." );
         }
     }
 }
