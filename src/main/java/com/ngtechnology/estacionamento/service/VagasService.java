@@ -15,6 +15,9 @@ import java.util.Optional;
 @Service
 public class VagasService {
 
+    /**
+     * Seguir o exemplo de logs comentado na controller e colocar na service
+     */
     private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
 
 
@@ -26,6 +29,7 @@ public class VagasService {
     }
     //Arrumar o nome desse método
     public Vagas getVagaById(Long idVaga) {
+        //TODO implementar log na service...
         return repository.findById(idVaga).get();
     }
     public Optional<Vagas> getVagaByIdOptional(Long idVaga) {
@@ -43,7 +47,8 @@ public class VagasService {
             repository.save(vagasEntity);
             return vagasEntity;
         }
-        else { logger.warn("O id: " + vagas.getIdVaga() + " informado é inexistente");
+        else {
+            logger.warn("O id: " + vagas.getIdVaga() + " informado é inexistente");
             throw new RuntimeException("O id informado é inexistente." );
         }
     }

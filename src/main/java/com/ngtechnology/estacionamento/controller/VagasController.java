@@ -42,11 +42,20 @@ public class VagasController {
     @GetMapping("/{id}")
     public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
         try {
+            /** Padrao para log
+             *             logger.info("m=getIdVaga - status=start" );
+             */
             Vagas vagas = service.getVagaById(id);
             logger.info("Vaga com id: " + id + " encotrada" );
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagas.getIdVaga())
                     .withBuilderDisponivel(vagas.getDisponivel());
+            /** Padrao para log
+             * m= nome do metodo
+             * status = se está começando ou terminando
+             * é um exemplo de padrão de logs para ajudar na rastreabilidade da aplicação
+             *             logger.info("m=getIdVaga - status=finish - id= " + id );
+             */
         return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (NoSuchElementException idNull) {
             logger.warn("Vaga com id: " + id + " não encontrada");
@@ -80,8 +89,6 @@ public class VagasController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-
-
 }
 
 
