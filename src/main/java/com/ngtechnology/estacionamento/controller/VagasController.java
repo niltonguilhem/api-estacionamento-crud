@@ -44,6 +44,7 @@ public class VagasController {
         try {
             /** Padrao para log
              *             logger.info("m=getIdVaga - status=start" );
+             *  falta logs na service
              */
             Vagas vagas = service.getVagaById(id);
             logger.info("Vaga com id: " + id + " encotrada" );
