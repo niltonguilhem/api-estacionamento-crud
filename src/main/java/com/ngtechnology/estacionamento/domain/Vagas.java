@@ -2,10 +2,17 @@ package com.ngtechnology.estacionamento.domain;
 
 import javax.persistence.*;
 
+/**
+ * nomenclaturas
+ * tb_vagas
+ */
 @Entity
 @Table (name = "vagas")
 public class Vagas {
 
+    /**
+     * palavras compostas no banco utliza _ por exemplo: vaga_id
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idvaga")
