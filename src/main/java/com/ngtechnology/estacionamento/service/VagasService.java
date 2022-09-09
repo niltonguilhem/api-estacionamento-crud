@@ -15,40 +15,42 @@ import java.util.Optional;
 @Service
 public class VagasService {
 
-    /**
-     * Seguir o exemplo de logs comentado na controller e colocar na service
-     */
     private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
 
 
     @Autowired
     private VagasRepository repository;
 
-    public List<Vagas> findAllVagas() {
+    public List<Vagas> getAllVagas() {
+        logger.info("m=getAllVagas - status=service_Ok");
         return repository.findAll();
     }
-    //Arrumar o nome desse método
     public Vagas getVagaById(Long idVaga) {
-        //TODO implementar log na service...
+        logger.info("m=getVagaById - status=service_Ok");
         return repository.findById(idVaga).get();
     }
     public Optional<Vagas> getVagaByIdOptional(Long idVaga) {
+        logger.info("m=getVagaByIdOptional - status=service_Ok");
         return repository.findById(idVaga);
     }
 
-    public Vagas save(Vagas vagas) {return repository.save(vagas);}
+    public Vagas save(Vagas vagas) {
+        logger.info("m=save - status=service_Ok");
+        return repository.save(vagas);}
 
 
     public Vagas update(Vagas vagas) {
         Optional<Vagas> optional = getVagaByIdOptional(vagas.getIdVaga());
+        logger.info("m=update - status=start");
         if (optional.isPresent()){
             Vagas vagasEntity = vagas;
             vagasEntity.setDisponivel(vagas.getDisponivel());
             repository.save(vagasEntity);
+            logger.info("m=update - status=finish");
             return vagasEntity;
         }
         else {
-            logger.warn("O id: " + vagas.getIdVaga() + " informado é inexistente");
+            logger.warn("m=update - status=unknown id " + vagas.getIdVaga());
             throw new RuntimeException("O id informado é inexistente." );
         }
     }

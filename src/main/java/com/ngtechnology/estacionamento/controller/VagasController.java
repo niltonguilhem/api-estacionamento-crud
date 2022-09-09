@@ -31,7 +31,7 @@ public class VagasController {
     @GetMapping()
     public ResponseEntity<List<VagasResponse>> getAllVagas(){
         logger.info("m=getAllVagas - status=start");
-        List<Vagas> vagasList = service.findAllVagas();
+        List<Vagas> vagasList = service.getAllVagas();
         List<VagasResponse> vagasResponseList = vagasList.stream().map(x -> new VagasResponse()
                 .withBuilderVagasId(x.getIdVaga())
                 .withBuilderDisponivel(x.getDisponivel())).toList();
