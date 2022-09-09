@@ -30,36 +30,28 @@ public class VagasController {
 
     @GetMapping()
     public ResponseEntity<List<VagasResponse>> getAllVagas(){
-        logger.info("Consultando vagas...");
+        logger.info("m=getAllVagas - status=start");
         List<Vagas> vagasList = service.findAllVagas();
         List<VagasResponse> vagasResponseList = vagasList.stream().map(x -> new VagasResponse()
                 .withBuilderVagasId(x.getIdVaga())
                 .withBuilderDisponivel(x.getDisponivel())).toList();
-
+        logger.info("m=getAllVagas - status=finish");
         return new ResponseEntity<>(vagasResponseList,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
         try {
-            /** Padrao para log
-             *             logger.info("m=getIdVaga - status=start" );
-             *  falta logs na service
-             */
+
             Vagas vagas = service.getVagaById(id);
-            logger.info("Vaga com id: " + id + " encotrada" );
+            logger.info("m=getIdVaga - status=start" );
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagas.getIdVaga())
                     .withBuilderDisponivel(vagas.getDisponivel());
-            /** Padrao para log
-             * m= nome do metodo
-             * status = se está começando ou terminando
-             * é um exemplo de padrão de logs para ajudar na rastreabilidade da aplicação
-             *             logger.info("m=getIdVaga - status=finish - id= " + id );
-             */
+            logger.info("m=getIdVaga - status=finish" );
         return new ResponseEntity<>(response, HttpStatus.OK);
         }catch (NoSuchElementException idNull) {
-            logger.warn("Vaga com id: " + id + " não encontrada");
+            logger.warn("m=getIdVaga - status=unknown id " + id);
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -68,17 +60,17 @@ public class VagasController {
         ResponseEntity<VagasResponse> result;
 
             Vagas vagas = service.save(new Vagas().withBuilderDisponivel(vagasRequest.getDisponivel()));
-            logger.info("Vaga cadastrada com sucesso!!!");
+            logger.info("m=postVagas - status=start");
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagas.getIdVaga())
                     .withBuilderDisponivel(vagas.getDisponivel());
             result = new ResponseEntity<>(response, HttpStatus.CREATED);
-
+            logger.info("m=postVagas - status=finish");
         return result;
     }
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id, @RequestBody VagasRequest vagasRequest){
-
+        logger.info("m=putVagas - status=start");
             Vagas vagasUpdate = service.update(new Vagas()
                     .withBuilderVagasId(id)
                     .withBuilderDisponivel(vagasRequest.getDisponivel()));
@@ -86,7 +78,7 @@ public class VagasController {
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagasUpdate.getIdVaga())
                     .withBuilderDisponivel(vagasUpdate.getDisponivel());
-                    logger.info("Vaga com id: " + id + " atualizado");
+                    logger.info("m=putVagas - status=update id " + id);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
