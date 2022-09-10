@@ -9,6 +9,9 @@ public class Vagas {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idvaga")
+    /**
+     * Palavra composta, nomenclatura de banco id_vaga
+     */
     private Long idVaga;
     @Column(name = "disponivel")
     private Boolean disponivel;

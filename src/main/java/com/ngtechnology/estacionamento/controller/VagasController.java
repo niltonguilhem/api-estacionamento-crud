@@ -24,7 +24,10 @@ import java.util.NoSuchElementException;
 public class VagasController {
 
     private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
-
+            /**
+             * processamento de log do start é a primeira coisa que acontece no código, então
+             * ele deve ficar em primeiro
+             */
     @Autowired
     private VagasService service;
 
@@ -42,7 +45,10 @@ public class VagasController {
     @GetMapping("/{id}")
     public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
         try {
-
+            /**
+             * Podemos logar ids e outras informações que n expõe o dado
+             * do cliente.
+             */
             Vagas vagas = service.getVagaById(id);
             logger.info("m=getIdVaga - status=start" );
             VagasResponse response = new VagasResponse()
@@ -70,6 +76,10 @@ public class VagasController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id, @RequestBody VagasRequest vagasRequest){
+        /**
+         * Podemos logar ids e outras informações que n expõe o dado
+         * do cliente, isso facilita a busca de bugs, mesmo que esteja repetido na service
+         */
         logger.info("m=putVagas - status=start");
             Vagas vagasUpdate = service.update(new Vagas()
                     .withBuilderVagasId(id)
