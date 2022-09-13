@@ -20,22 +20,6 @@ public class VagasService {
     @Autowired
     private VagasRepository repository;
 
-    /**
-     * 1- log info status start ou finish
-     * os logs da services não ajudam o senhor a detectar um bug,
-     * pois aparenta que foi executado com sucesso.
-     * nesses casos o senhor pode criar uma variavel, ex:
-     *
-     * logger.info("m=findAllVagas - status=start");
-     *          List<Vagas> vagasList = repository.findAll();
-     *          logger.info("m=findAllVagas - status= finish");
-     *         return vagasList;
-     *"Feito aguardando análise do Jr."
-     *
-     * 2- Padrão de log deve ser mantido em toda a estrutura do projeto.
-     * "Feito aguardando análise do Jr."
-     */
-
     public List<Vagas> findAllVagas() {
         logger.info("m=getAllVagas - status=start");
         List<Vagas> vagasList = repository.findAll();
@@ -74,10 +58,6 @@ public class VagasService {
             return vagasEntity;
         }
         else {
-            /**
-             * faltou id= na mensagem de WARN
-             * Warn está correto, pois não é um erro de runtime e sim um lembrete de que n saiu como esperado
-              "Feito, aguardando análise do Jr." */
             logger.warn("m=update - status=warn " + vagas.getIdVaga());
             throw new RuntimeException("O id informado é inexistente." );
         }

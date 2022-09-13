@@ -24,10 +24,7 @@ import java.util.NoSuchElementException;
 public class VagasController {
 
     private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
-            /**
-             * processamento de log do start é a primeira coisa que acontece no código, então
-             * ele deve ficar em primeiro. "Feito só estou aguardando análise do Jr."
-             */
+
     @Autowired
     private VagasService service;
 
@@ -45,11 +42,6 @@ public class VagasController {
     @GetMapping("/{id}")
     public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
         try {
-            /**
-             * Podemos logar ids e outras informações que n expõe o dado
-             * do cliente. "Estou demonstrando o id no log, pq neste caso o id não é um dado sencivel."
-             * "Falta análise do Jr."
-             */
             logger.info("m=getIdVaga - status=start " + id);
             Vagas vagas = service.getVagaById(id);
             VagasResponse response = new VagasResponse()
@@ -76,12 +68,7 @@ public class VagasController {
     }
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@PathVariable("id")Long id, @RequestBody VagasRequest vagasRequest){
-        /**
-         * Podemos logar ids e outras informações que n expõe o dado
-         * do cliente, isso facilita a busca de bugs, mesmo que esteja repetido na service.
-         * "Feito, aguardando análise do Jr."
-         */
-        logger.info("m=putVagas - status=start " + id);
+            logger.info("m=putVagas - status=start " + id);
             Vagas vagasUpdate = service.update(new Vagas()
                     .withBuilderVagasId(id)
                     .withBuilderDisponivel(vagasRequest.getDisponivel()));
