@@ -8,17 +8,17 @@ public class VagasResponse {
     public VagasResponse(){
     }
 
-    public VagasResponse(Long idVaga, Boolean disponivel) {
-        this.idVaga = idVaga;
+    public VagasResponse(Long id_Vaga, Boolean disponivel) {
+        this.idVaga = id_Vaga;
         this.disponivel = disponivel;
     }
 
-    public Long getIdVaga() {
+    public Long getId_Vaga() {
         return idVaga;
     }
 
-    public void setIdVaga(Long idVaga) {
-        this.idVaga = idVaga;
+    public void setId_Vaga(Long id_Vaga) {
+        this.idVaga = id_Vaga;
     }
 
     public Boolean getDisponivel() {
@@ -34,7 +34,7 @@ public class VagasResponse {
         return this;
     }
     public VagasResponse withBuilderVagasId(Long vagasId){
-        setIdVaga(vagasId);
+        setId_Vaga(vagasId);
         return this;
     }
 }

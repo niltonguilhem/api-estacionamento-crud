@@ -30,43 +30,55 @@ public class VagasService {
      *          List<Vagas> vagasList = repository.findAll();
      *          logger.info("m=findAllVagas - status= finish");
      *         return vagasList;
+     *"Feito aguardando análise do Jr."
      *
-     * 2- Padrão de log deve ser mantido em toda a estrutura do projeto
+     * 2- Padrão de log deve ser mantido em toda a estrutura do projeto.
+     * "Feito aguardando análise do Jr."
      */
-    public List<Vagas> getAllVagas() {
-        logger.info("m=getAllVagas - status=service_Ok");
-        return repository.findAll();
+
+    public List<Vagas> findAllVagas() {
+        logger.info("m=getAllVagas - status=start");
+        List<Vagas> vagasList = repository.findAll();
+              logger.info("m=findAllVagas - status= finish");
+              return vagasList;
     }
     public Vagas getVagaById(Long idVaga) {
-        logger.info("m=getVagaById - status=service_Ok");
-        return repository.findById(idVaga).get();
+        logger.info("m=getVagaById - status=start " + idVaga);
+        Vagas vagas = repository.findById(idVaga).get();
+        logger.info("m=getVagaById - status=finish " + idVaga);
+        return vagas;
     }
     public Optional<Vagas> getVagaByIdOptional(Long idVaga) {
-        logger.info("m=getVagaByIdOptional - status=service_Ok");
-        return repository.findById(idVaga);
+        logger.info("m=getVagaByIdOptional - status=start " + idVaga);
+        Optional<Vagas> vagasOptional = repository.findById(idVaga);
+        logger.info("m=getVagaByIdOptional - status=finish " + idVaga);
+        return vagasOptional;
     }
 
     public Vagas save(Vagas vagas) {
-        logger.info("m=save - status=service_Ok");
-        return repository.save(vagas);}
+        logger.info("m=save - status=start");
+        Vagas vagasSave = repository.save(vagas);
+        logger.info("m=save - status=finish");
+        return vagasSave;
+    }
 
 
     public Vagas update(Vagas vagas) {
+        logger.info("m=update - status=start " + vagas.getIdVaga());
         Optional<Vagas> optional = getVagaByIdOptional(vagas.getIdVaga());
-        logger.info("m=update - status=start");
         if (optional.isPresent()){
             Vagas vagasEntity = vagas;
             vagasEntity.setDisponivel(vagas.getDisponivel());
             repository.save(vagasEntity);
-            logger.info("m=update - status=finish");
+            logger.info("m=update - status=finish " + vagas.getIdVaga());
             return vagasEntity;
         }
         else {
             /**
              * faltou id= na mensagem de WARN
              * Warn está correto, pois não é um erro de runtime e sim um lembrete de que n saiu como esperado
-             */
-            logger.warn("m=update - status=unknown id " + vagas.getIdVaga());
+              "Feito, aguardando análise do Jr." */
+            logger.warn("m=update - status=warn " + vagas.getIdVaga());
             throw new RuntimeException("O id informado é inexistente." );
         }
     }
