@@ -15,16 +15,16 @@ import java.util.Optional;
 @Service
 public class VagasService {
 
-    private static final Logger logger = LoggerFactory.getLogger(VagasController.class);
 
+    private static final Logger logger = LoggerFactory.getLogger(VagasService.class);
     @Autowired
     private VagasRepository repository;
 
     public List<Vagas> findAllVagas() {
-        logger.info("m=getAllVagas - status=start");
+        logger.info("m=findAllVagas - status=start");
         List<Vagas> vagasList = repository.findAll();
-              logger.info("m=findAllVagas - status= finish");
-              return vagasList;
+        logger.info("m=findAllVagas - status= finish");
+        return vagasList;
     }
     public Vagas getVagaById(Long idVaga) {
         logger.info("m=getVagaById - status=start " + idVaga);
