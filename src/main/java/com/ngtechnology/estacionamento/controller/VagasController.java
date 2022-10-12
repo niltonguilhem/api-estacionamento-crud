@@ -5,20 +5,16 @@ import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
 import com.ngtechnology.estacionamento.service.VagasService;
-import com.sun.istack.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 ;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-
-
 
 @RestController
 @RequestMapping("/api/v1/estacionamento")
@@ -57,21 +53,19 @@ public class VagasController {
         }
     }
     @PostMapping
-    public ResponseEntity<VagasResponse> postVagas(@RequestHeader(value = "Partner") String Partner,
-                                                   @RequestBody VagasRequest vagasRequest) {
+    public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
+                                                   @RequestHeader(value = "Partner") String Partner) {
             ResponseEntity<VagasResponse> result;
             logger.info("m=postVagas - status=start " + Partner);
-            Vagas vagas = service.save(new Vagas().withBuilderDisponivel(vagasRequest.getDisponivel()));
+            Vagas vagas = service.save(new Vagas()
+                    .withBuilderDisponivel(vagasRequest.getDisponivel()));
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagas.getIdVaga())
                     .withBuilderDisponivel(vagas.getDisponivel());
             result = new ResponseEntity<>(response,HttpStatus.CREATED);
             logger.info("m=postVagas - status=finish " + Partner);
             return result;
-
     }
-
-
     @PutMapping("/{id}")
     public ResponseEntity<VagasResponse> putVagas (@RequestHeader(value = "Partner") String Partner,
                                                    @PathVariable("id")Long id,
