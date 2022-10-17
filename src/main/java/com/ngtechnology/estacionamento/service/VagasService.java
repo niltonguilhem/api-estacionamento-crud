@@ -3,10 +3,14 @@ package com.ngtechnology.estacionamento.service;
 import com.ngtechnology.estacionamento.controller.VagasController;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.repository.VagasRepository;
+import com.ngtechnology.estacionamento.utils.MyHandlerInterceptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
 import java.util.List;
@@ -14,7 +18,6 @@ import java.util.Optional;
 
 @Service
 public class VagasService {
-
 
     private static final Logger logger = LoggerFactory.getLogger(VagasService.class);
     @Autowired
