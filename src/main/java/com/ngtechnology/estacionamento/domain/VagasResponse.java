@@ -5,12 +5,13 @@ public class VagasResponse {
     private Long idVaga;
     private Boolean disponivel;
 
-    public VagasResponse(){
-    }
-
     public VagasResponse(Long idVaga, Boolean disponivel) {
         this.idVaga = idVaga;
         this.disponivel = disponivel;
+    }
+
+    public VagasResponse() {
+
     }
 
     public Long getIdVaga() {
@@ -28,7 +29,6 @@ public class VagasResponse {
     public void setDisponivel(Boolean disponivel) {
         this.disponivel = disponivel;
     }
-
     public VagasResponse withBuilderDisponivel(Boolean disponivel){
         setDisponivel(disponivel);
         return this;

@@ -5,20 +5,20 @@ import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
 import com.ngtechnology.estacionamento.service.VagasService;
-import com.ngtechnology.estacionamento.utils.MyHandlerInterceptor;
+import com.ngtechnology.estacionamento.utils.VagasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
+import javax.el.EvaluationListener;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/api/v1/estacionamento")
@@ -57,38 +57,27 @@ public class VagasController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
     }
-    @Configuration
-    public class WebMvcConfig implements WebMvcConfigurer {
-
-        @Autowired
-        private MyHandlerInterceptor interceptor;
-
-        @Override
-        public void addInterceptors(InterceptorRegistry registry) {
-            registry.addInterceptor(interceptor).addPathPatterns();
-        }
-    }
         @PostMapping
         public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
-                                                       @RequestHeader WebMvcConfig Partner1,
-                                                       @RequestHeader WebMvcConfig Partner2){
+                                                       @RequestHeader String partner)throws Exception{
+            VagasUtils.validatedHeader(partner);
             ResponseEntity<VagasResponse> result;
-            logger.info("m=postVagas - status=start " + Partner1 + Partner2);
+            logger.info("m=postVagas - status=start " + partner);
             Vagas vagas = service.save(new Vagas()
                     .withBuilderDisponivel(vagasRequest.getDisponivel()));
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagas.getIdVaga())
                     .withBuilderDisponivel(vagas.getDisponivel());
             result = new ResponseEntity<>(response, HttpStatus.CREATED);
-            logger.info("m=postVagas - status=finish " + Partner1 + Partner2);
+            logger.info("m=postVagas - status=finish " + partner);
             return result;
         }
 
         @PutMapping("/{id}")
-        public ResponseEntity<VagasResponse> putVagas(@RequestHeader(value = "Partner") String Partner,
+        public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
-                                                      @RequestBody VagasRequest vagasRequest) {
-            logger.info("m=putVagas - status=start " + id + " " + Partner);
+                                                      @RequestBody VagasRequest vagasRequest){
+            logger.info("m=putVagas - status=start " + id + " " + partner);
             Vagas vagasUpdate = service.update(new Vagas()
                     .withBuilderVagasId(id)
                     .withBuilderDisponivel(vagasRequest.getDisponivel()));
@@ -96,7 +85,7 @@ public class VagasController {
             VagasResponse response = new VagasResponse()
                     .withBuilderVagasId(vagasUpdate.getIdVaga())
                     .withBuilderDisponivel(vagasUpdate.getDisponivel());
-            logger.info("m=putVagas - status=finish " + id + " " + Partner);
+            logger.info("m=putVagas - status=finish " + id + " " + partner);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         }
