@@ -2,6 +2,7 @@ package com.ngtechnology.estacionamento.service;
 
 
 import com.ngtechnology.estacionamento.domain.Vagas;
+import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.repository.VagasRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,9 @@ public class VagasService {
         }
         else {
             logger.warn("m=update - status=warn " + vagas.getIdVaga());
-            throw new RuntimeException("O id informado é inexistente." );
+            //throw new RuntimeException("O id informado é inexistente." );
+            throw new EntidadeInexistenteException(String.format
+                    ("O id informado é inexistente."));
         }
     }
 }

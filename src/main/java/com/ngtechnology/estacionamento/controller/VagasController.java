@@ -4,11 +4,14 @@ package com.ngtechnology.estacionamento.controller;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
+import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
+import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.service.VagasService;
 import com.ngtechnology.estacionamento.utils.VagasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -54,7 +57,7 @@ public class VagasController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (NoSuchElementException idNull) {
             logger.warn("m=getIdVaga - status=warn " + id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
         @PostMapping
@@ -76,7 +79,9 @@ public class VagasController {
         @PutMapping("/{id}")
         public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
-                                                      @RequestBody VagasRequest vagasRequest){
+                                                      @RequestBody VagasRequest vagasRequest) throws PartnerException {
+        try {
+            VagasUtils.validatedHeader(partner);
             logger.info("m=putVagas - status=start " + id + " " + partner);
             Vagas vagasUpdate = service.update(new Vagas()
                     .withBuilderVagasId(id)
@@ -88,9 +93,13 @@ public class VagasController {
             logger.info("m=putVagas - status=finish " + id + " " + partner);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
+        } catch (EntidadeInexistenteException response) {
+            return ResponseEntity.notFound().build();
         }
 
-    }
+
+        }
+}
 
 
 
