@@ -80,7 +80,7 @@ public class VagasController {
         public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
                                                       @RequestBody VagasRequest vagasRequest) throws PartnerException {
-        try {
+
             VagasUtils.validatedHeader(partner);
             logger.info("m=putVagas - status=start " + id + " " + partner);
             Vagas vagasUpdate = service.update(new Vagas()
@@ -92,11 +92,6 @@ public class VagasController {
                     .withBuilderDisponivel(vagasUpdate.getDisponivel());
             logger.info("m=putVagas - status=finish " + id + " " + partner);
             return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (EntidadeInexistenteException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
-        }
-
 
     }
 }
