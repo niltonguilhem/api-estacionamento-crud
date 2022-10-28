@@ -4,6 +4,7 @@ package com.ngtechnology.estacionamento.controller;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
+import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.service.VagasService;
 import com.ngtechnology.estacionamento.utils.VagasUtils;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -74,10 +76,11 @@ public class VagasController {
         }
 
         @PutMapping("/{id}")
+        @ResponseStatus(HttpStatus.NO_CONTENT)
         public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
                                                       @RequestBody VagasRequest vagasRequest) throws PartnerException {
-        //try {
+        try {
             VagasUtils.validatedHeader(partner);
             logger.info("m=putVagas - status=start " + id + " " + partner);
             Vagas vagasUpdate = service.update(new Vagas()
@@ -90,13 +93,12 @@ public class VagasController {
             logger.info("m=putVagas - status=finish " + id + " " + partner);
             return new ResponseEntity<>(response, HttpStatus.OK);
 
-        /*} catch (EntidadeInexistenteException response) {
-            return ResponseEntity.notFound().build();
-            outra forma seria: return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Entidade não encontrado");
-        }*/
-
-
+        } catch (EntidadeInexistenteException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
         }
+
+
+    }
 }
 
 

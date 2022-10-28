@@ -7,9 +7,8 @@ import com.ngtechnology.estacionamento.repository.VagasRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
+
 
 
 import java.util.List;
@@ -61,11 +60,9 @@ public class VagasService {
         }
         else {
             logger.warn("m=update - status=warn " + vagas.getIdVaga());
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    String.format("O id %d informado é inexistente.", vagas.getIdVaga()));
             //throw new RuntimeException("O id informado é inexistente." );
-            //throw new EntidadeInexistenteException(String.format
-              //      ("O id %d informado é inexistente.", vagas.getIdVaga()));
+            throw new EntidadeInexistenteException(String.format
+                    ("O id %d informado é inexistente.", vagas.getIdVaga()));
         }
     }
 }
