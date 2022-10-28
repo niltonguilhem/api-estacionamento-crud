@@ -62,7 +62,7 @@ public class VagasService {
             logger.warn("m=update - status=warn " + vagas.getIdVaga());
             //throw new RuntimeException("O id informado é inexistente." );
             throw new EntidadeInexistenteException(String.format
-                    ("O id informado é inexistente."));
+                    ("O id "+ vagas.getIdVaga() + " informado é inexistente."));
         }
     }
 }

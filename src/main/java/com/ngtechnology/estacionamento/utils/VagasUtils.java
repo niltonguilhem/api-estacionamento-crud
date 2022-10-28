@@ -20,13 +20,14 @@ public class VagasUtils {
     }
 
     public static Boolean validatedPartner(String partner) throws PartnerException {
+        logger.info("m=validatedPartner - status=start ");
         if (!ObjectUtils.isEmpty(partner))
             if (partner.equals("Star-Park") || partner.equals("Center-Park") || partner.equals("Downton-Park")) {
+                logger.info("m=validatedPartner - status=finish ");
                 return true;
-
             }
         else{
-                    logger.warn("m=validatePartner - status=warn ");
+                    logger.warn("m=PartnerException - status=warn ");
                     throw new PartnerException(String.format
                             ("O partner informado é inválido."));
         }
