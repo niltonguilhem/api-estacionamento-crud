@@ -4,21 +4,18 @@ package com.ngtechnology.estacionamento.controller;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
-import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.service.VagasService;
 import com.ngtechnology.estacionamento.utils.VagasUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
-import javax.el.EvaluationListener;
 import java.util.List;
 import java.util.NoSuchElementException;
 
