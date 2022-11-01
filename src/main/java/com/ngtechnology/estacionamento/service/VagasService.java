@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
@@ -23,13 +23,16 @@ public class VagasService {
 
     public List<Vagas> findAllVagas() {
         logger.info("m=findAllVagas - status=start");
-        List<Vagas> vagasList = repository.findAll();
-        logger.info("m=findAllVagas - status= finish");
-        return vagasList;
+
+            List<Vagas> vagasList = repository.findAll();
+            logger.info("m=findAllVagas - status= finish");
+            return vagasList;
     }
     public Vagas getVagaById(Long idVaga) {
         logger.info("m=getVagaById - status=start " + idVaga);
-        Vagas vagas = repository.findById(idVaga).get();
+        Vagas vagas = repository.findById(idVaga)
+                .orElseThrow(() -> new EntidadeInexistenteException(
+                        String.format("Não existe vaga com este id %d",idVaga)));
         logger.info("m=getVagaById - status=finish " + idVaga);
         return vagas;
     }
@@ -48,7 +51,7 @@ public class VagasService {
     }
 
 
-    public Vagas update(Vagas vagas) {
+   public Vagas update(Vagas vagas) {
         logger.info("m=update - status=start " + vagas.getIdVaga());
         Optional<Vagas> optional = getVagaByIdOptional(vagas.getIdVaga());
         if (optional.isPresent()){
@@ -60,7 +63,6 @@ public class VagasService {
         }
         else {
             logger.warn("m=update - status=warn " + vagas.getIdVaga());
-            //throw new RuntimeException("O id informado é inexistente." );
             throw new EntidadeInexistenteException(String.format
                     ("O id %d informado é inexistente.", vagas.getIdVaga()));
         }

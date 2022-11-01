@@ -45,8 +45,7 @@ public class VagasController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id) {
-        try {
+    public ResponseEntity<VagasResponse> getIdVagas(@PathVariable("id") Long id)  {
             logger.info("m=getIdVaga - status=start " + id);
             Vagas vagas = service.getVagaById(id);
             VagasResponse response = new VagasResponse()
@@ -54,10 +53,6 @@ public class VagasController {
                     .withBuilderDisponivel(vagas.getDisponivel());
             logger.info("m=getIdVaga - status=finish " + id);
             return new ResponseEntity<>(response, HttpStatus.OK);
-        } catch (NoSuchElementException idNull) {
-            logger.warn("m=getIdVaga - status=warn " + id);
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
         @PostMapping
         public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
@@ -75,7 +70,7 @@ public class VagasController {
             return result;
         }
 
-        @PutMapping("/{id}")
+       @PutMapping("/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
