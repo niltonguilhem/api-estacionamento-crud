@@ -15,11 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 
 @RestController
@@ -56,7 +54,7 @@ public class VagasController {
     }
         @PostMapping
         public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
-                                                       @RequestHeader String partner)throws Exception{
+                                                       @RequestHeader String partner)throws PartnerException{
             VagasUtils.validatedHeader(partner);
             ResponseEntity<VagasResponse> result;
             logger.info("m=postVagas - status=start " + partner);
@@ -71,8 +69,8 @@ public class VagasController {
         }
 
        @PutMapping("/{id}")
-        @ResponseStatus(HttpStatus.NO_CONTENT)
-        public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
+       @ResponseStatus(HttpStatus.NO_CONTENT)
+       public ResponseEntity<VagasResponse> putVagas(@RequestHeader String partner,
                                                       @PathVariable("id") Long id,
                                                       @RequestBody VagasRequest vagasRequest) throws PartnerException {
 
@@ -89,6 +87,21 @@ public class VagasController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
+    @ExceptionHandler(EntidadeInexistenteException.class)
+    public ResponseEntity<String> handlerIdNaoEncontradoException(
+            EntidadeInexistenteException exception) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(exception.getMessage());
+    }
+
+    @ExceptionHandler(PartnerException.class)
+    public ResponseEntity<String> handlerPartnerNaoEncontradoException(
+            PartnerException exceptionPartner) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(exceptionPartner.getMessage());
+    }
+
+
 }
 
 
