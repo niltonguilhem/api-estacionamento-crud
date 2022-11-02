@@ -87,21 +87,6 @@ public class VagasController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
     }
-    @ExceptionHandler(EntidadeInexistenteException.class)
-    public ResponseEntity<String> handlerIdNaoEncontradoException(
-            EntidadeInexistenteException exception) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(exception.getMessage());
-    }
-
-    @ExceptionHandler(PartnerException.class)
-    public ResponseEntity<String> handlerPartnerNaoEncontradoException(
-            PartnerException exceptionPartner) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(exceptionPartner.getMessage());
-    }
-
-
 }
 
 
