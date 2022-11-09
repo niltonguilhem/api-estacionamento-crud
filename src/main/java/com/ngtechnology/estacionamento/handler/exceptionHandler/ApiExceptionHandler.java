@@ -10,21 +10,26 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
-
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(EntidadeInexistenteException.class)
-    public ResponseEntity<?> handlerIdNaoEncontradoException(
+    public ResponseEntity<?> handleIdNaoEncontradoException(
             EntidadeInexistenteException exception, WebRequest request) {
-        return handleExceptionInternal(exception, exception.getMessage(), new HttpHeaders(),
-                HttpStatus.NOT_FOUND, request);
+        HttpStatus status= HttpStatus.NOT_FOUND;
+
+        Problem problem = new Problem()
+                .withBuilderStatus(status.value())
+                .withBuilderType("https://ngtechnology.com.br/entidade-nao-encontrada")
+                .withBuilderTitle("Entidade não encontrada")
+                .withBuilderDetail(exception.getMessage());
+
+        return handleExceptionInternal(exception, problem, new HttpHeaders(),
+                status, request);
     }
 
     @ExceptionHandler(PartnerException.class)
-    public ResponseEntity<?> handlerPartnerNaoEncontradoException(
+    public ResponseEntity<?> handlePartnerNaoEncontradoException(
             PartnerException exceptionPartner, WebRequest request) {
         return handleExceptionInternal(exceptionPartner, exceptionPartner.getMessage(), new HttpHeaders(),
                 HttpStatus.NOT_FOUND, request);
@@ -34,15 +39,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
                                                              HttpStatus status, WebRequest request) {
         if (body == null) {
-            body = new Problema()
-                    .withBuilderDataHora(LocalDateTime.now())
-                    .withBuilderMensagem(status.getReasonPhrase());
+            body = new Problem()
+                    .withBuilderTitle(status.getReasonPhrase())
+                    .withBuilderStatus(status.value());
         } else if (body instanceof  String) {
-            body = new Problema()
-                    .withBuilderDataHora(LocalDateTime.now())
-                    .withBuilderMensagem((String) body);
+            body = new Problem()
+                    .withBuilderTitle((String) body)
+                    .withBuilderStatus(status.value());
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
     }
+
+    
 }
 
