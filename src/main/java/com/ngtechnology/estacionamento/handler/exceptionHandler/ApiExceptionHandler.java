@@ -2,9 +2,11 @@ package com.ngtechnology.estacionamento.handler.exceptionHandler;
 
 import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
+import com.ngtechnology.estacionamento.handler.exception.ProblemType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -13,16 +15,29 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
+
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException  exception,
+                                                                  HttpHeaders headers, HttpStatus status,
+                                                                  WebRequest request) {
+
+        ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
+        String detail = "O corpo da requisição está invalido. Verifique erro de sintaxe.";
+
+        Problem problem = createWithBuilderProblem(status, problemType, detail);
+
+        return handleExceptionInternal(exception, problem, new HttpHeaders(),
+                status, request);
+    }
+
     @ExceptionHandler(EntidadeInexistenteException.class)
     public ResponseEntity<?> handleIdNaoEncontradoException(
             EntidadeInexistenteException exception, WebRequest request) {
         HttpStatus status= HttpStatus.NOT_FOUND;
+        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
+        String detail = exception.getMessage();
 
-        Problem problem = new Problem()
-                .withBuilderStatus(status.value())
-                .withBuilderType("https://ngtechnology.com.br/entidade-nao-encontrada")
-                .withBuilderTitle("Entidade não encontrada")
-                .withBuilderDetail(exception.getMessage());
+        Problem problem = createWithBuilderProblem(status, problemType, detail);
 
         return handleExceptionInternal(exception, problem, new HttpHeaders(),
                 status, request);
@@ -36,7 +51,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     }
     @Override
-    protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, HttpHeaders headers,
+    protected ResponseEntity<Object> handleExceptionInternal(Exception exception, Object body, HttpHeaders headers,
                                                              HttpStatus status, WebRequest request) {
         if (body == null) {
             body = new Problem()
@@ -47,9 +62,16 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                     .withBuilderTitle((String) body)
                     .withBuilderStatus(status.value());
         }
-        return super.handleExceptionInternal(ex, body, headers, status, request);
+        return super.handleExceptionInternal(exception, body, headers, status, request);
     }
 
-    
+    private Problem createWithBuilderProblem(HttpStatus status, ProblemType problemType,
+                                             String detail){
+        return new Problem()
+                .withBuilderStatus(status.value())
+                .withBuilderType(problemType.getUri())
+                .withBuilderTitle(problemType.getTitle())
+                .withBuilderDetail(detail);
+    }
 }
 

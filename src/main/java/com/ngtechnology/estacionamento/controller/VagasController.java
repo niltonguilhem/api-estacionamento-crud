@@ -17,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -53,7 +54,7 @@ public class VagasController {
             return new ResponseEntity<>(response, HttpStatus.OK);
     }
         @PostMapping
-        public ResponseEntity<VagasResponse> postVagas(@RequestBody VagasRequest vagasRequest,
+        public ResponseEntity<VagasResponse> postVagas(@RequestBody @Valid VagasRequest vagasRequest,
                                                        @RequestHeader String partner)throws PartnerException{
             VagasUtils.validatedHeader(partner);
             ResponseEntity<VagasResponse> result;

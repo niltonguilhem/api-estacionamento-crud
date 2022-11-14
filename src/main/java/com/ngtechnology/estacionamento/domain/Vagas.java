@@ -1,6 +1,7 @@
 package com.ngtechnology.estacionamento.domain;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table (name = "tb_vagas")
@@ -11,6 +12,8 @@ public class Vagas {
     @Column(name = "id_vaga")
 
     private Long idVaga;
+
+    @NotNull
     @Column(name = "disponivel")
     private Boolean disponivel;
 
