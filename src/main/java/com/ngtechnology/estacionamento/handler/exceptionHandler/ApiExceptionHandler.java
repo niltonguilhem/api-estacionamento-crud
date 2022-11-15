@@ -1,8 +1,10 @@
 package com.ngtechnology.estacionamento.handler.exceptionHandler;
 
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.handler.exception.ProblemType;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException  exception,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
+        Throwable rootCause = ExceptionUtils.getRootCause(exception);
+
+        if (rootCause instanceof InvalidFormatException){
+            return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
+        }
 
         ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
         String detail = "O corpo da requisição está invalido. Verifique erro de sintaxe.";
@@ -28,6 +35,12 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(exception, problem, new HttpHeaders(),
                 status, request);
+    }
+
+    private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException exception,
+                                                                HttpHeaders headers, HttpStatus status,
+                                                                WebRequest request){
+        return null;
     }
 
     @ExceptionHandler(EntidadeInexistenteException.class)

@@ -75,11 +75,4 @@ public class Problem {
         setDetail(detail);
         return this;
     }
-
-
-    public static class withBuilderProblem {
-
-    }
-
-
 }
