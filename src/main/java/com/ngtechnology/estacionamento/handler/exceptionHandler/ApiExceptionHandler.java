@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.stream.Collectors;
+
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -33,14 +35,27 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         Problem problem = createWithBuilderProblem(status, problemType, detail);
 
-        return handleExceptionInternal(exception, problem, new HttpHeaders(),
-                status, request);
+        return handleExceptionInternal(exception, problem, headers ,status, request);
     }
 
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException exception,
                                                                 HttpHeaders headers, HttpStatus status,
                                                                 WebRequest request){
-        return null;
+        //exception.getPath().forEach(ref -> System.out.println(ref.getFieldName())); //para fazer teste e identificar as referências.
+
+        String path = exception.getPath().stream()
+                .map(ref -> ref.getFieldName())
+                .collect(Collectors.joining());// Caso eu queira realizar um join concatenando com um complemento do id é só inserir um ponto entre aspas duplas dentro do parenteses.
+
+        ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
+        String detail = String.format("A propriedade '%s' recebeu o valor '%s, que é de um tipo inválido. " +
+                "Corrija e informe um valor compatível com o tipo %s.", path, exception.getValue(),
+                exception.getTargetType().getSimpleName());
+
+        Problem problem = createWithBuilderProblem(status, problemType, detail);
+
+        return handleExceptionInternal(exception,problem, headers,status,request);
+
     }
 
     @ExceptionHandler(EntidadeInexistenteException.class)

@@ -75,4 +75,5 @@ public class Problem {
         setDetail(detail);
         return this;
     }
+
 }
