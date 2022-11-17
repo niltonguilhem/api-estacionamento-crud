@@ -20,6 +20,10 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
+    public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema." +
+            "Tente novamente e se o problema persistir, entre em contato com o administrador " +
+            "do sistema";
+
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException  exception,
                                                                   HttpHeaders headers, HttpStatus status,
@@ -33,7 +37,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
         String detail = "O corpo da requisição está invalido. Verifique erro de sintaxe.";
 
-        Problem problem = createWithBuilderProblem(status, problemType, detail);
+        Problem problem = createWithBuilderProblem(status, problemType, detail)
+                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
 
         return handleExceptionInternal(exception, problem, headers ,status, request);
     }
@@ -41,18 +46,18 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException exception,
                                                                 HttpHeaders headers, HttpStatus status,
                                                                 WebRequest request){
-        //exception.getPath().forEach(ref -> System.out.println(ref.getFieldName())); //para fazer teste e identificar as referências.
 
         String path = exception.getPath().stream()
                 .map(ref -> ref.getFieldName())
-                .collect(Collectors.joining());// Caso eu queira realizar um join concatenando com um complemento do id é só inserir um ponto entre aspas duplas dentro do parenteses.
+                .collect(Collectors.joining());
 
         ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
         String detail = String.format("A propriedade '%s' recebeu o valor '%s, que é de um tipo inválido. " +
                 "Corrija e informe um valor compatível com o tipo %s.", path, exception.getValue(),
                 exception.getTargetType().getSimpleName());
 
-        Problem problem = createWithBuilderProblem(status, problemType, detail);
+        Problem problem = createWithBuilderProblem(status, problemType, detail)
+                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
 
         return handleExceptionInternal(exception,problem, headers,status,request);
 
@@ -65,7 +70,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
         String detail = exception.getMessage();
 
-        Problem problem = createWithBuilderProblem(status, problemType, detail);
+        Problem problem = createWithBuilderProblem(status, problemType, detail)
+                .withBuilderUserMessage(detail);
+
 
         return handleExceptionInternal(exception, problem, new HttpHeaders(),
                 status, request);

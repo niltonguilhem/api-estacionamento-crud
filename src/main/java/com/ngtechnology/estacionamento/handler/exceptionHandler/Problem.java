@@ -9,21 +9,26 @@ public class Problem {
     private Integer status;
     private String type;
     private String title;
-
     private String detail;
+
+    private String userMessage;
 
     public Problem(){
 
     }
 
     public Problem(Integer status, String type, String title,
-                   String detail){
+                   String detail, String userMessage){
         this.status = status;
         this.type = type;
         this.title = title;
         this.detail = detail;
+        this.userMessage = userMessage;
     }
 
+    public String getUserMessage() {
+        return userMessage;
+    }
     public Integer getStatus() {
         return status;
     }
@@ -56,6 +61,10 @@ public class Problem {
         this.detail = detail;
     }
 
+    public void setUserMessage(String userMessage) {
+        this.userMessage = userMessage;
+    }
+
     public Problem withBuilderStatus(Integer status){
         setStatus(status);
         return this;
@@ -73,6 +82,11 @@ public class Problem {
 
     public Problem withBuilderDetail(String detail){
         setDetail(detail);
+        return this;
+    }
+
+    public Problem withBuilderUserMessage(String userMessage){
+        setUserMessage(userMessage);
         return this;
     }
 
