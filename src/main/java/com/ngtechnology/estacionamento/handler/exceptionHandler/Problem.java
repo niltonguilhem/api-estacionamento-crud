@@ -2,28 +2,84 @@ package com.ngtechnology.estacionamento.handler.exceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Problem {
 
     private Integer status;
+    private LocalDateTime timestamp;
     private String type;
     private String title;
     private String detail;
-
     private String userMessage;
+    private List<Field> fields;
 
-    public Problem(){
+    public Problem() {
 
     }
 
-    public Problem(Integer status, String type, String title,
+    public static class Field{
+
+        private String name;
+        private String userMessage;
+
+        public Field(){
+
+        }
+
+        public Field(String name, String userMessage){
+            this.name = name;
+            this.userMessage = userMessage;
+
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getUserMessage() {
+            return userMessage;
+        }
+
+        public void setUserMessage(String userMessage) {
+            this.userMessage = userMessage;
+        }
+
+        public Field withBuilderUserMessage(String userMessage){
+            setUserMessage(userMessage);
+            return this;
+        }
+
+        public Field withBuilderName(String name){
+            setName(name);
+            return this;
+        }
+    }
+
+
+    public Problem(Integer status, LocalDateTime timestamp, String type, String title,
                    String detail, String userMessage){
         this.status = status;
+        this.timestamp = timestamp;
         this.type = type;
         this.title = title;
         this.detail = detail;
         this.userMessage = userMessage;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getUserMessage() {
@@ -65,8 +121,20 @@ public class Problem {
         this.userMessage = userMessage;
     }
 
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
+    }
+
     public Problem withBuilderStatus(Integer status){
         setStatus(status);
+        return this;
+    }
+    public Problem withBuilderTimestamp(LocalDateTime timestamp){
+        setTimestamp(timestamp);
         return this;
     }
 
@@ -87,6 +155,11 @@ public class Problem {
 
     public Problem withBuilderUserMessage(String userMessage){
         setUserMessage(userMessage);
+        return this;
+    }
+
+    public Problem withBuilderFields(List<Field> fields){
+        setFields(fields);
         return this;
     }
 

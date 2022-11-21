@@ -9,11 +9,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -23,9 +27,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema." +
             "Tente novamente e se o problema persistir, entre em contato com o administrador " +
             "do sistema";
+    //handleHttpMessageNotReadable
 
     @Override
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException  exception,
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
         Throwable rootCause = ExceptionUtils.getRootCause(exception);
@@ -37,8 +42,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
         String detail = "O corpo da requisição está invalido. Verifique erro de sintaxe.";
 
+        BindingResult bindingResult = exception.getBindingResult();
+
+        List<Problem.Field>problemFields = bindingResult.getFieldErrors().stream()
+                .map(fieldError -> new Problem.Field()
+                        .withBuilderName(fieldError.getField())
+                        .withBuilderUserMessage(fieldError.getDefaultMessage()))
+                .collect(Collectors.toList());
+
         Problem problem = createWithBuilderProblem(status, problemType, detail)
-                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
+                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+                .withBuilderFields(problemFields);
 
         return handleExceptionInternal(exception, problem, headers ,status, request);
     }
@@ -70,7 +84,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
         String detail = exception.getMessage();
 
+
         Problem problem = createWithBuilderProblem(status, problemType, detail)
+                .withBuilderTimestamp(LocalDateTime.now())
                 .withBuilderUserMessage(detail);
 
 
@@ -91,11 +107,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (body == null) {
             body = new Problem()
                     .withBuilderTitle(status.getReasonPhrase())
-                    .withBuilderStatus(status.value());
+                    .withBuilderStatus(status.value())
+                    .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
         } else if (body instanceof  String) {
             body = new Problem()
                     .withBuilderTitle((String) body)
-                    .withBuilderStatus(status.value());
+                    .withBuilderStatus(status.value())
+                    .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
         }
         return super.handleExceptionInternal(exception, body, headers, status, request);
     }
@@ -106,7 +124,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .withBuilderStatus(status.value())
                 .withBuilderType(problemType.getUri())
                 .withBuilderTitle(problemType.getTitle())
-                .withBuilderDetail(detail);
+                .withBuilderDetail(detail)
+                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
     }
 }
 
