@@ -2,6 +2,7 @@ package com.ngtechnology.estacionamento.handler.exceptionHandler;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,6 +25,8 @@ public class Problem {
     public static class Field{
 
         private String name;
+
+
         private String userMessage;
 
         public Field(){

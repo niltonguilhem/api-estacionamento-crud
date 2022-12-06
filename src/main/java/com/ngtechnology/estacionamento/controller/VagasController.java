@@ -4,7 +4,6 @@ package com.ngtechnology.estacionamento.controller;
 import com.ngtechnology.estacionamento.domain.Vagas;
 import com.ngtechnology.estacionamento.domain.VagasRequest;
 import com.ngtechnology.estacionamento.domain.VagasResponse;
-import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.service.VagasService;
 import com.ngtechnology.estacionamento.utils.VagasUtils;

@@ -1,8 +1,12 @@
 package com.ngtechnology.estacionamento.domain;
 
+
+
 import javax.validation.constraints.NotNull;
 
+
 public class VagasRequest {
+
     @NotNull
     private Boolean disponivel;
 

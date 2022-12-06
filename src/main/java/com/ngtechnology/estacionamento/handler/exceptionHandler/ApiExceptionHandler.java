@@ -5,10 +5,12 @@ import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteExce
 import com.ngtechnology.estacionamento.handler.exception.PartnerException;
 import com.ngtechnology.estacionamento.handler.exception.ProblemType;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +30,9 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     public static final String MSG_ERRO_GENERICA_USUARIO_FINAL = "Ocorreu um erro interno inesperado no sistema." +
             "Tente novamente e se o problema persistir, entre em contato com o administrador " +
             "do sistema";
-    //handleHttpMessageNotReadable
+
+    @Autowired
+    private MessageSource messageSource;
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
@@ -45,13 +50,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         BindingResult bindingResult = exception.getBindingResult();
 
         List<Problem.Field>problemFields = bindingResult.getFieldErrors().stream()
-                .map(fieldError -> new Problem.Field()
-                        .withBuilderName(fieldError.getField())
-                        .withBuilderUserMessage(fieldError.getDefaultMessage()))
+                .map(fieldError -> {
+                    String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+
+                    return new Problem.Field()
+                            .withBuilderName(fieldError.getField())
+                            .withBuilderUserMessage(message);
+                })
                 .collect(Collectors.toList());
 
-        Problem problem = createWithBuilderProblem(status, problemType, detail)
-                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL)
+        Problem problem = createWithBuilderProblem (status, problemType, detail)
+                .withBuilderUserMessage("O campo não pode ser nulo!")
                 .withBuilderFields(problemFields);
 
         return handleExceptionInternal(exception, problem, headers ,status, request);
@@ -71,7 +80,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 exception.getTargetType().getSimpleName());
 
         Problem problem = createWithBuilderProblem(status, problemType, detail)
-                .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
+                .withBuilderUserMessage("1");
 
         return handleExceptionInternal(exception,problem, headers,status,request);
 
@@ -108,7 +117,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             body = new Problem()
                     .withBuilderTitle(status.getReasonPhrase())
                     .withBuilderStatus(status.value())
-                    .withBuilderUserMessage(MSG_ERRO_GENERICA_USUARIO_FINAL);
+                    .withBuilderUserMessage("O campo disponivel está com valor inválido!!!");
         } else if (body instanceof  String) {
             body = new Problem()
                     .withBuilderTitle((String) body)
