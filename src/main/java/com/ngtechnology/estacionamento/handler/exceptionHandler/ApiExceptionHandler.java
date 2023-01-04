@@ -18,10 +18,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import javax.validation.Valid;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.ngtechnology.estacionamento.handler.exception.ProblemType.ENTIDADE_NAO_ENCONTRADA;
 
 
 @ControllerAdvice
@@ -44,7 +46,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
             return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
         }
 
-        ProblemType problemType = ProblemType.CORPO_DO_JSON_ESTA_INCORRETO;
+        ProblemType problemType = ENTIDADE_NAO_ENCONTRADA;
         String detail = "O corpo da requisição está invalido. Verifique erro de sintaxe.";
 
         BindingResult bindingResult = exception.getBindingResult();
@@ -80,27 +82,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 exception.getTargetType().getSimpleName());
 
         Problem problem = createWithBuilderProblem(status, problemType, detail)
-                .withBuilderUserMessage("1");
+                .withBuilderUserMessage("O campo não pode ser nulo!");
 
         return handleExceptionInternal(exception,problem, headers,status,request);
-
     }
 
     @ExceptionHandler(EntidadeInexistenteException.class)
-    public ResponseEntity<?> handleIdNaoEncontradoException(
-            EntidadeInexistenteException exception, WebRequest request) {
-        HttpStatus status= HttpStatus.NOT_FOUND;
-        ProblemType problemType = ProblemType.ENTIDADE_NAO_ENCONTRADA;
-        String detail = exception.getMessage();
-
-
-        Problem problem = createWithBuilderProblem(status, problemType, detail)
+    public ResponseEntity<Problem> handleIdNaoEncontradoException(
+            EntidadeInexistenteException exception) {
+        Problem problem = new Problem()
                 .withBuilderTimestamp(LocalDateTime.now())
-                .withBuilderUserMessage(detail);
-
-
-        return handleExceptionInternal(exception, problem, new HttpHeaders(),
-                status, request);
+                .withBuilderUserMessage(exception.getMessage());
+        return ResponseEntity.status (HttpStatus.NOT_FOUND)
+                .body(problem);
     }
 
     @ExceptionHandler(PartnerException.class)
