@@ -1,7 +1,7 @@
 package com.ngtechnology.estacionamento.service;
 
 
-import com.ngtechnology.estacionamento.domain.Vagas;
+import com.ngtechnology.estacionamento.model.Vagas;
 import com.ngtechnology.estacionamento.handler.exception.EntidadeInexistenteException;
 import com.ngtechnology.estacionamento.repository.VagasRepository;
 import org.slf4j.Logger;

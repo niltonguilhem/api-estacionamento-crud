@@ -1,4 +1,4 @@
-package com.ngtechnology.estacionamento.domain;
+package com.ngtechnology.estacionamento.model;
 
 import javax.persistence.*;
 

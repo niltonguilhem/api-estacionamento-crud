@@ -1,0 +1,103 @@
+---
+openapi: 3.0.0
+info:
+  title: API Estacionamento CRUD
+  description: Uma API para gerenciar disponibilidade de vagas
+  version: "0.1"
+servers:
+- url: https://virtserver.swaggerhub.com/niltonguilhem/API-Estacionamento-CRUD/0.1
+  description: SwaggerHub API Auto Mocking
+paths:
+  /estacionamento:
+    description: Esse endpoint deverá ser usado sempre que for necessário fazer requisições onde não há parametro no path.
+    post:
+      tags:
+      - Vagas
+      description: Essa operação insere uma nova vaga no banco de dados
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagasRequest'
+      responses:
+        "201":
+          description: Item de estoque cadastrado com sucesso!
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Not Found
+        "5XX":
+          description: Erro no servidor! Tente novamente mais tarde!
+  /estacionamento/{id}:
+    get:
+      tags:
+      - Vagas
+      description: Esse metodo retorna os dados de uma vaga.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Vaga encontrado!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagasResponse'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Vaga não encontrada!
+    put:
+      tags:
+      - Vaga
+      description: Esse metodo altera os dados de uma vaga.
+      parameters:
+      - name: id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        description: Dados atualizados referentes a vaga.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VagasRequest'
+      responses:
+        "200":
+          description: Vaga encontrada!
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VagasResponse'
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+        "404":
+          description: Vaga não encontrada!
+components:
+  schemas:
+    VagasRequest:
+      type: object
+      properties:
+        disponivel:
+          type: boolean
+    VagasResponse:
+      type: object
+      properties:
+        idVaga:
+          type: integer
+        disponivel:
+          type: boolean
