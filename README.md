@@ -15,6 +15,10 @@ consultado é existente e que o Handler seja validado com um dos parceiros aceit
 - REST
 - MVC
 
+
+<img width="246" alt="image" src="https://user-images.githubusercontent.com/48165776/215806935-8dfc6847-f6b9-4c95-9618-5d0fe104d364.png">
+
+
 ## Pre-requisites
 
 - Java 11
