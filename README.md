@@ -44,3 +44,38 @@ Dependência para documentar a API
 			<version>${springfox.version}</version>
 		</dependency>
     
+## Running application
+
+Para rodar a aplicação localmente, o seguinte comando maven pode ser utilizado:
+
+```gradle
+./mvn clean install run
+```
+
+## Endpoints
+
+**POST /v1/estacionamento**
+
+```gradle
+curl 'http://localhost:8080/api/v1/estacionamento'
+```
+
+**GET /v1/estacionamento**
+
+```gradle
+curl 'http://localhost:8080/api/v1/estacionamento'
+```
+
+** GET ID /v1/estacionamento/**
+
+```gradle
+curl 'http://localhost:8080/api/v1/estacionamento/(Numero do ID)'
+```
+
+**Health Check**
+
+
+````gradle
+ curl 'http://localhost:8080/actuator/health'  
+ 
+````
