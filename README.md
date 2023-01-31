@@ -32,21 +32,33 @@ consultado é existente e que o Handler seja validado com um dos parceiros aceit
 
 Dependência para verificar a saúde da aplicação
 
-    <dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-actuator</artifactId>
 			<version>2.7.2</version>
 		</dependency>
+		
+**MicrometerPrometheus**
+
+Dependência para monitorar a aplicação
+
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<version>${micrometer.version}</version>
+		</dependency>
+
     
 **Swagger** 
 
 Dependência para documentar a API
 
-    <dependency>
+		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
-			<version>${springfox.version}</version>
+			<version>3.0.0</version>
 		</dependency>
+		
     
 ## Running application
 
@@ -70,7 +82,7 @@ curl 'http://localhost:8080/api/v1/estacionamento'
 curl 'http://localhost:8080/api/v1/estacionamento'
 ```
 
-** GET ID /v1/estacionamento/**
+**GET ID /v1/estacionamento/**
 
 ```gradle
 curl 'http://localhost:8080/api/v1/estacionamento/(Numero do ID)'
@@ -78,8 +90,12 @@ curl 'http://localhost:8080/api/v1/estacionamento/(Numero do ID)'
 
 **Health Check**
 
-
-````gradle
+```gradle
  curl 'http://localhost:8080/actuator/health'  
- 
+```
+
+**Grafana**
+
+```grade
+curl 'http://localhost:3000/login'
 ````
