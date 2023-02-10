@@ -73,7 +73,7 @@ Para rodar a aplicação localmente, o seguinte comando maven pode ser utilizado
 **POST /v1/estacionamento**
 
 ```gradle
-curl 'http://localhost:8080/api/v1/estacionamento'
+curl -i -X POST -H "Content-Type:application/json" -H "partner:Downton-Park" -d "{\"disponivel\":\"true\"}" http://localhost:8080/api/v1/estacionamento
 ```
 
 **GET /v1/estacionamento**
