@@ -80,7 +80,7 @@ curl 'http://localhost:8080/api/v1/estacionamento'
 **GET ID /v1/estacionamento/**
 
 ```gradle
-curl 'http://localhost:8080/api/v1/estacionamento/(Numero do ID)'
+curl 'http://localhost:8080/api/v1/estacionamento/(numero do id)'
 ```
 
 **POST /v1/estacionamento**
