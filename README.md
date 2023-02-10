@@ -94,8 +94,4 @@ curl 'http://localhost:8080/api/v1/estacionamento/(Numero do ID)'
  curl 'http://localhost:8080/actuator/health'  
 ```
 
-**Grafana**
 
-```grade
-curl 'http://localhost:3000/login'
-````
